@@ -1,5 +1,6 @@
 import robocode.*;
 import java.awt.Color;
+import java.util.Random;
 
 // API help : https://robocode.sourceforge.io/docs/robocode/robocode/Robot.html
 
@@ -19,6 +20,7 @@ public class CarsonBot extends Robot
 		// After trying out your robot, try uncommenting the import at the top,
 		// and the next line:
 
+		Random rand = new Random();
 		setColors(Color.red,Color.blue,Color.green); // body,gun,radar
 
 		// Robot main loop
@@ -31,13 +33,38 @@ public class CarsonBot extends Robot
 					turnGunRight(target);
 				}
 
-				fire(1);
+				fire(0.4);
 				foundAtHeading = null;
 			}
 
-			ahead(100);
-			turnRight(30);
+
+			double moveAmount = rand.nextDouble() * 200;
+			boolean moveDirection = rand.nextDouble() < 0.5;
+			double turnAmount = rand.nextDouble() * 180;
+			boolean turnDirection = rand.nextDouble() < 0.5;
+			double turnGunAmount = rand.nextDouble() * 180;
+			boolean turnGunDirection = rand.nextDouble() < 0.5;
+
+			if (moveDirection) {
+				ahead(moveAmount);
+			} else {
+				back(moveAmount);
+			}
+
+			if (turnDirection) {
+				turnRight(turnAmount);
+			} else {
+				turnLeft(turnAmount);
+			}
+
+			if (turnGunDirection) {
+				turnGunRight(turnGunAmount);
+			} else {
+				turnGunLeft(turnGunAmount);
+			}
+
 			scan();
+			fire(0.3);
 		}
 	}
 
@@ -55,7 +82,7 @@ public class CarsonBot extends Robot
 	 * onScannedRobot: What to do when you see another robot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-		foundAtHeading = e.getHeading();
+		fire(1);
 	}
 
 	/**
