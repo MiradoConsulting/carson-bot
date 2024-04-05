@@ -8,6 +8,8 @@ import java.awt.Color;
  */
 public class CarsonBot extends Robot
 {
+	private double foundAtHeading = null;
+
 	/**
 	 * run: CarsonBot's default behavior
 	 */
@@ -21,11 +23,31 @@ public class CarsonBot extends Robot
 
 		// Robot main loop
 		while(true) {
-			// Replace the next 4 lines with any behavior you would like
+			if (foundAtHeading != null) {
+				double target = angleBetween(foundAtHeading, getGunHeading());
+				if (target < 0) {
+					turnGunLeft(-target);
+				} else {
+					turnGunRight(target);
+				}
+
+				fire();
+				foundAtHeading = null;
+			}
+
 			ahead(100);
-			turnGunRight(360);
-			back(100);
-			turnGunRight(360);
+			turnRight(30);
+			scan();
+		}
+	}
+
+	private double angleBetween(double a1, double a2) {
+		double res1 = (a1 - a2) % (2 * Math.PI);
+		double res2 = (a2 - a1) % (2 * Math.PI);
+		if (res1 < res2) {
+			return -res1;
+		} else {
+			return res2;
 		}
 	}
 
@@ -33,9 +55,7 @@ public class CarsonBot extends Robot
 	 * onScannedRobot: What to do when you see another robot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-
-		// Replace the next line with any behavior you would like
-		fire(1);
+		foundAtHeading = e.getHeading();
 	}
 
 	/**
