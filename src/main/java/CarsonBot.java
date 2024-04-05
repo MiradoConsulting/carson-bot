@@ -8,7 +8,7 @@ import java.awt.Color;
  */
 public class CarsonBot extends Robot
 {
-	private double foundAtHeading = null;
+	private Double foundAtHeading = null;
 
 	/**
 	 * run: CarsonBot's default behavior
@@ -31,7 +31,7 @@ public class CarsonBot extends Robot
 					turnGunRight(target);
 				}
 
-				fire();
+				fire(1);
 				foundAtHeading = null;
 			}
 
