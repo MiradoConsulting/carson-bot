@@ -42,8 +42,6 @@ public class CarsonBot extends Robot
 			boolean moveDirection = rand.nextDouble() < 0.5;
 			double turnAmount = rand.nextDouble() * 180;
 			boolean turnDirection = rand.nextDouble() < 0.5;
-			double turnGunAmount = rand.nextDouble() * 180;
-			boolean turnGunDirection = rand.nextDouble() < 0.5;
 
 			if (moveDirection) {
 				ahead(moveAmount);
@@ -55,12 +53,6 @@ public class CarsonBot extends Robot
 				turnRight(turnAmount);
 			} else {
 				turnLeft(turnAmount);
-			}
-
-			if (turnGunDirection) {
-				turnGunRight(turnGunAmount);
-			} else {
-				turnGunLeft(turnGunAmount);
 			}
 
 			scan();
@@ -82,6 +74,7 @@ public class CarsonBot extends Robot
 	 * onScannedRobot: What to do when you see another robot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
+		foundAtHeading = e.getHeading();
 		fire(1);
 	}
 
