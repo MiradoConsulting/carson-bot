@@ -10,6 +10,7 @@ import java.util.Random;
 public class CarsonBot extends Robot
 {
 	private Double foundAtHeading = null;
+	private Double foundAtBearing = null;
 
 	/**
 	 * run: CarsonBot's default behavior
@@ -21,42 +22,29 @@ public class CarsonBot extends Robot
 		// and the next line:
 
 		Random rand = new Random();
-		setColors(Color.red,Color.blue,Color.green); // body,gun,radar
+		setColors(Color.pink, Color.pink, Color.pink); // body,gun,radar
 
 		// Robot main loop
 		while(true) {
-			if (foundAtHeading != null) {
-				double target = angleBetween(foundAtHeading, getGunHeading());
-				if (target < 0) {
-					turnGunLeft(-target);
+			if (foundAtBearing != null) {
+				if (foundAtBearing < 0) {
+					turnLeft(-foundAtBearing);
 				} else {
-					turnGunRight(target);
+					turnRight(foundAtBearing);
 				}
 
-				fire(0.4);
+				fire(1);
 				foundAtHeading = null;
+				foundAtBearing = null;
+				scan();
+				ahead(50);
 			}
 
-
-			double moveAmount = rand.nextDouble() * 200;
-			boolean moveDirection = rand.nextDouble() < 0.5;
-			double turnAmount = rand.nextDouble() * 180;
-			boolean turnDirection = rand.nextDouble() < 0.5;
-
-			if (moveDirection) {
-				ahead(moveAmount);
-			} else {
-				back(moveAmount);
+			if (foundAtHeading == null) {
+				turnGunLeft(360);
+				turnRight(90);
+				ahead(200);
 			}
-
-			if (turnDirection) {
-				turnRight(turnAmount);
-			} else {
-				turnLeft(turnAmount);
-			}
-
-			scan();
-			fire(0.3);
 		}
 	}
 
@@ -75,6 +63,7 @@ public class CarsonBot extends Robot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
 		foundAtHeading = e.getHeading();
+		foundAtBearing = e.getBearing();
 		fire(1);
 	}
 
